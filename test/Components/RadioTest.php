@@ -2,38 +2,37 @@
 
 namespace Test\Components;
 
-use Gui\Application;
-use Gui\Components\Option;
-use Gui\Components\Radio;
-use PHPUnit\Framework\TestCase;
+use Gui\Application;use Gui\Components\Option;use Gui\Components\Radio;use InvalidArgumentException;use PHPUnit\Framework\TestCase;
 
+/**
+* Class RadioTest.
+ */
 class RadioTest extends TestCase
 {
-
-    public function testSetOptions()
+    public function testSetOptions(): void
     {
         $radio = new Radio([], null, new Application());
 
-        $this->assertSame($radio, $radio->setOptions([new Option('foo', 1)]));
+        static::assertSame($radio, $radio->setOptions([new Option('foo', 1)]));
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    public function testShouldThrowExceptionWithSetOptionsInvalidIntegerArgument()
+    public function testShouldThrowExceptionWithSetOptionsInvalidIntegerArgument(): void
     {
+        $this->expectException(InvalidArgumentException::class);
         $radio = new Radio([], null, new Application());
-
         $radio->setOptions([1]);
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    public function testShouldThrowExceptionWithSetOptionsInvalidArgument()
+    public function testShouldThrowExceptionWithSetOptionsInvalidArgument(): void
     {
+        $this->expectException(InvalidArgumentException::class);
         $radio = new Radio([], null, new Application());
-
         $radio->setOptions(['foo' => 'bar']);
     }
 }

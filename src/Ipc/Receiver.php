@@ -2,20 +2,13 @@
 
 namespace Gui\Ipc;
 
-use Gui\Application;
-use Gui\Exception\ComponentException;
-use Gui\OsDetector;
-use Gui\Output;
-use React\Stream\Stream;
+use Exception;use Gui\Application;use Gui\Exception\ComponentException;use Gui\OsDetector;use Gui\Output;use React\Stream\Stream;use function fstat;use function json_decode;use function json_encode;use function json_last_error;use function property_exists;use function stream_get_contents;use function stream_select;use function strpos;use function substr;use function usleep;use const JSON_ERROR_NONE;
 
 /**
- * This is the Receiver class.
- *
- * This class is used to receive communication messages
+ * This is the Receiver class. This class is used to receive communication
+ * messages
  *
  * @author Gabriel Couto @gabrielrcouto
- *
- * @since 0.1
  */
 class Receiver
 {
@@ -36,7 +29,7 @@ class Receiver
     /**
      * Array of callbacks.
      *
-     * @var array
+     * @var callable[]
      */
     public $messageCallbacks = [];
 
@@ -84,7 +77,7 @@ class Receiver
      * @param int      $id       Message ID
      * @param callable $callback Callback function
      */
-    public function addMessageCallback($id, callable $callback)
+    public function addMessageCallback(int $id, callable $callback): void
     {
         $this->messageCallbacks[$id] = $callback;
     }
@@ -95,7 +88,7 @@ class Receiver
      * @param int    $id        Object ID
      * @param string $eventName Event Name
      */
-    public function callObjectEventListener($id, $eventName)
+    public function callObjectEventListener(int $id, string $eventName): void
     {
         $object = $this->application->getObject($id);
 
@@ -107,12 +100,12 @@ class Receiver
     /**
      * Result received, time to call the message callback.
      *
-     * @param int                     $id     Message ID
-     * @param string|array|object|int $result Command Result
+     * @param int $id Message ID
+     * @param mixed $result Command Result
      */
-    public function callMessageCallback($id, $result)
+    public function callMessageCallback(int $id, $result): void
     {
-        if (array_key_exists($id, $this->messageCallbacks)) {
+        if (! isset($this->messageCallbacks[$id])) {
             $this->messageCallbacks[$id]($result);
             unset($this->messageCallbacks[$id]);
         }
@@ -122,20 +115,18 @@ class Receiver
      * Decode a received message.
      *
      * @param string $json Received json message
-     *
      * @return MessageInterface|void
-     *
      * @throws ComponentException
      */
-    protected function jsonDecode($json)
+    public function jsonDecode(string $json): ?MessageInterface
     {
-        $obj = @json_decode($json);
+        $obj = json_decode($json, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            $strErr = 'JSON ERROR: '.$json;
-            if ($this->application->getVerboseLevel() == 2) {
-                Output::err($strErr);
+            $error = 'JSON ERROR: ' . $json;
+            if ($this->application->getVerboseLevel() >= 2) {
+                Output::err($error);
             }
-            throw new ComponentException($strErr);
+            throw new \ComponentException($error);
         }
 
         return $obj;
@@ -150,12 +141,10 @@ class Receiver
      *
      * @return array the JSON split into valid JSON
      */
-    protected function jsonSplit($json, &$carry = [])
+    protected function jsonSplit(string $json, array &$carry = []): array
     {
-        @json_decode($json);
-        if (json_last_error() === JSON_ERROR_NONE) {
+        if (json_decode($json) && json_last_error() === JSON_ERROR_NONE) {
             $carry[] = $json;
-
             return $carry;
         }
 
@@ -231,12 +220,12 @@ class Receiver
      *
      * @param string $data Data received
      */
-    public function onData($data)
+    public function onData($data): void
     {
         // Sometimes, multiple sets of JSON are sent through at the same time
         // on Windows.
         if (OsDetector::isWindows()) {
-            @json_decode($data);
+            json_decode($data);
 
             if (json_last_error() !== JSON_ERROR_NONE) {
                 $splits = $this->jsonSplit($data);
@@ -268,7 +257,7 @@ class Receiver
 
             // Now, process the message
             if ($message) {
-                if ($this->application->getVerboseLevel() == 2) {
+                if ($this->application->getVerboseLevel() >= 2) {
                     Output::out($this->prepareOutput($messageJson), 'green');
                 }
 
@@ -298,15 +287,15 @@ class Receiver
     /**
      * Parse a normal message, can be a command, command result or an event.
      *
-     * @param $message Message
+     * @param Message $message
      */
-    protected function parseNormal($message)
+    public function parseNormal(Message $message): void
     {
         // Can be a command or a result
         if ($message && property_exists($message, 'id')) {
             if (property_exists($message, 'result')) {
                 if ($this->isWaitingMessage) {
-                    if ($message->id == $this->waitingMessageId) {
+                    if ($message->id === $this->waitingMessageId) {
                         $this->waitingMessageResult = $message->result;
                         $this->isWaitingMessage = false;
                     } else {
@@ -318,7 +307,6 @@ class Receiver
             } else {
                 // @todo: Command implementation
             }
-
             return;
         }
 
@@ -330,8 +318,8 @@ class Receiver
         }
 
         // This is a notification/event!
-        if ($message && !property_exists($message, 'id')) {
-            if ($message->method == 'callObjectEventListener') {
+        if ($message && ! property_exists($message, 'id')) {
+            if ($message->method === 'callObjectEventListener') {
                 // @todo: Check if params contains all the items
                 $this->callObjectEventListener($message->params[0], $message->params[1]);
             }
@@ -342,12 +330,11 @@ class Receiver
      * Construct the output string.
      *
      * @param string $string Output string
-     *
      * @return string New output string
      */
-    protected function prepareOutput($string)
+    protected function prepareOutput(string $string): string
     {
-        return '<= Received: '.$string;
+        return '<= Received: ' . $string;
     }
 
     /**
@@ -364,7 +351,7 @@ class Receiver
         $result = stream_select($read, $write, $except, 0);
 
         if ($result === false) {
-            throw new \Exception('stream_select failed');
+            throw new Exception('stream_select failed');
         }
 
         if ($result === 0) {
@@ -388,14 +375,14 @@ class Receiver
                     $data = stream_get_contents($stream, 1);
                 }
 
-                $this->application->process->stdout->emit('data', array($data, $this));
+                $this->application->process->stdout->emit('data', [$data, $this]);
             }
         } else {
             // On Linux and OSX, we don't need to pass a size limit
             $data = stream_get_contents($stream);
 
-            if (!empty($data)) {
-                $this->application->process->stdout->emit('data', array($data, $this));
+            if (! empty($data)) {
+                $this->application->process->stdout->emit('data', [$data, $this]);
             }
         }
     }
@@ -405,7 +392,6 @@ class Receiver
      *
      * @param Stream           $stdout  Stdout Stream
      * @param MessageInterface $message Command waiting result
-     *
      * @return mixed The result
      */
     public function waitMessage(Stream $stdout, MessageInterface $message, Application $application)
@@ -426,7 +412,7 @@ class Receiver
         $result = $this->waitingMessageResult;
         $this->waitingMessageResult = null;
 
-        foreach ($this->parseMessagesBuffer as $key => $message) {
+        foreach ($this->parseMessagesBuffer as $message) {
             $this->parseNormal($message);
         }
 

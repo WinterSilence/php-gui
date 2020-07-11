@@ -1,8 +1,8 @@
-<p align="center"><img src="https://cloud.githubusercontent.com/assets/2197005/14036936/f3457ba0-f21c-11e5-886a-f754e8109c28.png" alt="php-gui" /></p>
+<p><img src="https://cloud.githubusercontent.com/assets/2197005/14036936/f3457ba0-f21c-11e5-886a-f754e8109c28.png" alt="php-gui"></p>
 
-<p align="center">Extensionless PHP Graphic User Interface library</p>
+<p>Extensionless PHP Graphic User Interface library</p>
 
-<p align="center"><img src="https://cloud.githubusercontent.com/assets/2197005/14338716/85ef00a2-fc4f-11e5-8ae8-7a0d5be74723.gif" alt="made with PHP S2" /></p>
+<p><img src="https://cloud.githubusercontent.com/assets/2197005/14338716/85ef00a2-fc4f-11e5-8ae8-7a0d5be74723.gif" alt="made with PHP S2"></p>
 
 [![Build Status](https://travis-ci.org/gabrielrcouto/php-gui.svg?branch=master)](https://travis-ci.org/gabrielrcouto/php-gui)
 [![Latest Stable Version](https://poser.pugx.org/gabrielrcouto/php-gui/v/stable)](https://packagist.org/packages/gabrielrcouto/php-gui)
@@ -70,21 +70,21 @@ Create the file 'myapp.php':
 
 ```php
 <?php
-require 'vendor/autoload.php';
+require './vendor/autoload.php';
 
 use Gui\Application;
 use Gui\Components\Button;
 
 $application = new Application();
 
-$application->on('start', function() use ($application) {
+$application->on('start', static function() {
     $button = (new Button())
         ->setLeft(40)
         ->setTop(100)
         ->setWidth(200)
         ->setValue('Look, I\'m a button!');
 
-    $button->on('click', function() use ($button) {
+    $button->on('click', static function() use ($button) {
         $button->setValue('Look, I\'m a clicked button!');
     });
 });
@@ -138,7 +138,7 @@ PHP <=> Stdin/Stdout Pipes <=> Lazarus Application <=> GUI
 
 The binary is created using Lazarus (Free Pascal). After much research, I found a large advantage by using Lazarus over other desktop languages (like C#, Java...):
 
-<p align="center"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/LCLArchitecture.png/440px-LCLArchitecture.png" alt="LCL graph, showing that LCL will use an interface for building the GUI according to the operation system" /></p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/LCLArchitecture.png/440px-LCLArchitecture.png" alt="LCL graph, showing that LCL will use an interface for building the GUI according to the operation system"></p>
 
 It doesn't have any dependencies (except for Linux, which needs GTK), has a good component library, is compiled, open source and has a nice slogan (Write Once, Compile Anywhere).
 

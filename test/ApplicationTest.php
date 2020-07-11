@@ -2,120 +2,119 @@
 
 namespace Test;
 
-use Gui\Application;
-use Gui\Components\Window;
-use PHPUnit\Framework\TestCase;
+use Gui\Application;use Gui\Components\AbstractObject;use Gui\Components\Window;use PHPUnit\Framework\TestCase;use React\EventLoop\LoopInterface;
 
+/**
+ * Application Test
+ */
 class ApplicationTest extends TestCase
 {
-    public function testGetNextObjectId()
+    public function testGetNextObjectId(): void
     {
         $application = new Application();
 
         // zero is for the object window
-        $this->assertEquals(1, $application->getNextObjectId());
-        $this->assertEquals(2, $application->getNextObjectId());
-        $this->assertEquals(3, $application->getNextObjectId());
+        self::assertEquals(1, $application->getNextObjectId());
+        self::assertEquals(2, $application->getNextObjectId());
+        self::assertEquals(3, $application->getNextObjectId());
     }
 
-    public function testGetWindow()
+    public function testGetWindow(): void
     {
         $application = new Application();
 
-        $this->assertInstanceOf('Gui\Components\Window', $application->getWindow());
+        static::assertInstanceOf(Window::class, $application->getWindow());
     }
 
-    public function testGetLoop()
+    public function testGetLoop(): void
     {
         $application = new Application();
 
-        $this->assertInstanceOf('React\EventLoop\LoopInterface', $application->getLoop());
+        static::assertInstanceOf(LoopInterface::class, $application->getLoop());
     }
 
-    public function testPing()
+    public function testPing(): void
     {
-        $mock = $this->getMockBuilder('Gui\Application')
-            ->setMethods(['waitCommand'])
+        $mock = $this->getMockBuilder(Application::class, ['waitCommand'])
             ->getMock();
 
-        $mock->expects($this->once())
+        $mock->expects(static::once())
             ->method('waitCommand')
             ->willReturn(null);
 
-        $this->assertTrue(is_float($mock->ping()));
+        static::assertTrue(is_float($mock->ping()));
     }
 
-    public function testAddObject()
+    public function testAddObject(): void
     {
         $application = new Application();
 
-        $this->assertNull($application->getObject(1));
+        self::assertNull($application->getObject(1));
 
         $application->addObject(new Window([], null, $application));
 
-        $this->assertInstanceOf('Gui\Components\Window', $application->getObject(1));
+        self::assertInstanceOf(Window::class, $application->getObject(1));
     }
 
-    public function testOnAndFire()
+    public function testOnAndFire(): void
     {
         $application = new Application();
 
         $bar = 0;
-        $application->on('foo', function () use (&$bar) {
+        $application->on('foo', static function () use (&$bar) {
             $bar++;
         });
 
         $application->fire('foo');
 
-        $this->assertEquals(1, $bar);
+        self::assertEquals(1, $bar);
     }
 
-    public function testGetAndSetVerboseLevel()
+    public function testGetAndSetVerboseLevel(): void
     {
         $application = new Application();
 
-        $this->assertEquals(2, $application->getVerboseLevel());
+        self::assertEquals(2, $application->getVerboseLevel());
         $application->setVerboseLevel(1);
-        $this->assertEquals(1, $application->getVerboseLevel());
+        self::assertEquals(1, $application->getVerboseLevel());
     }
 
-    public function testDestroyObject()
+    public function testDestroyObject(): void
     {
-        $appMock = $this->getMockBuilder('Gui\Application')
-            ->setMethods(['getWindow', 'sendCommand'])
-            ->getMock();
+        $appMock = $this->getMockBuilder(
+            Application::class,
+            ['getWindow', 'sendCommand']
+        )->getMock();
 
         $window = $this->getMockBuilder(
-            'Gui\Components\Window',
+            Window::class,
             [
                 [],
                 null,
-                $appMock
+                $appMock,
             ]
         )
             ->disableOriginalConstructor()
             ->getMock();
 
-        $appMock->expects($this->any())
-            ->method('getWindow')
-            ->will($this->returnValue($window));
+        $appMock->expects(self::any())
+            //->method('getWindow')
+            ->willReturn($window);
 
         $mock = $this->getMockForAbstractClass(
-            'Gui\Components\AbstractObject',
+            AbstractObject::class,
             [
                 [],
                 null,
-                $appMock
+                $appMock,
             ]
         );
 
-        $appMock->expects($this->once())
+        $appMock->expects(self::once())
             ->method('sendCommand')
             ->with(
                 'destroyObject',
-                [$mock->getLazarusObjectId()],
-                function () {
-                }
+                [$mock->getLazarusObjectId()]
             );
 
         $appMock->destroyObject($mock);

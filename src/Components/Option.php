@@ -2,13 +2,10 @@
 
 namespace Gui\Components;
 
-use Gui\Application;
-
 /**
  * This is the Option class
  *
  * @author Alex Silva
- * @since 0.1
  */
 class Option
 {
@@ -26,30 +23,42 @@ class Option
      */
     private $value;
 
-    public function __construct($label, $value)
+    /**
+     * Creates new instance.
+     *
+     * @param string $label
+     * @param int $value
+     */
+    public function __construct(string $label, int $value)
     {
-        $this->label = $label;
-        $this->value = $value;
+        $this->setLabel($label);
+        $this->setValue($value);
     }
 
     /**
      * This method is used to set an string label for the object instance
      *
      * @param string $label
+     *
+     * @return $this
      */
-    public function setLabel($label)
+    public function setLabel(string $label): Option
     {
         $this->label = $label;
+        return $this;
     }
 
     /**
      * This method is used to set an integer value for the object instance
      *
-     * @param integer $value
+     * @param int $value
+     *
+     * @return $this
      */
-    public function setValue($value)
+    public function setValue(int $value): Option
     {
         $this->value = $value;
+        return $this;
     }
 
     /**
@@ -57,18 +66,18 @@ class Option
      *
      * @return string
      */
-    public function getLabel()
+    public function getLabel(): string
     {
-        return (string) $this->label;
+        return $this->label;
     }
 
     /**
      * This method returns the instance value
      *
-     * @return integer
+     * @return int
      */
-    public function getValue()
+    public function getValue(): int
     {
-        return (int) $this->value;
+        return $this->value;
     }
 }

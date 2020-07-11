@@ -8,22 +8,21 @@ use Gui\Color;
  * It is a visual component
  *
  * @author Rodrigo Azevedo @rodrigowbazeved
- * @since 0.1
  */
-abstract class VisualObject extends AbstractObject implements VisualObjectInterface
+abstract class VisualObject extends AbstractObject
 {
     /**
      * {@inheritdoc}
      */
-    public function getAutoSize()
+    public function getAutoSize(): bool
     {
-        return $this->get('autosize');
+        return (bool) $this->get('autosize');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setAutoSize($autoSize)
+    public function setAutoSize(bool $autoSize): VisualObject
     {
         $this->set('autosize', $autoSize);
 
@@ -33,7 +32,7 @@ abstract class VisualObject extends AbstractObject implements VisualObjectInterf
     /**
      * {@inheritdoc}
      */
-    public function getBackgroundColor()
+    public function getBackgroundColor(): string
     {
         return $this->get('color');
     }
@@ -41,17 +40,16 @@ abstract class VisualObject extends AbstractObject implements VisualObjectInterf
     /**
      * {@inheritdoc}
      */
-    public function setBackgroundColor($color)
+    public function setBackgroundColor(string $color): VisualObject
     {
         $this->set('color', Color::toLazarus($color));
-
         return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getBottom()
+    public function getBottom(): int
     {
         return $this->get('bottom');
     }
@@ -59,7 +57,7 @@ abstract class VisualObject extends AbstractObject implements VisualObjectInterf
     /**
      * {@inheritdoc}
      */
-    public function setBottom($bottom)
+    public function setBottom(int $bottom): VisualObject
     {
         $this->set('bottom', $bottom);
 
@@ -149,7 +147,7 @@ abstract class VisualObject extends AbstractObject implements VisualObjectInterf
     /**
      * {@inheritdoc}
      */
-    public function setWidth($width)
+    public function setWidth(int $width): VisualObject
     {
         $this->set('width', $width);
 
@@ -159,7 +157,7 @@ abstract class VisualObject extends AbstractObject implements VisualObjectInterf
     /**
      * {@inheritdoc}
      */
-    public function getVisible()
+    public function getVisible(): bool
     {
         return $this->get('visible');
     }
@@ -167,7 +165,7 @@ abstract class VisualObject extends AbstractObject implements VisualObjectInterf
     /**
      * {@inheritdoc}
      */
-    public function setVisible($visible)
+    public function setVisible(bool $visible): VisualObject
     {
         $this->set('visible', $visible);
 

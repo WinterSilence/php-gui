@@ -2,23 +2,21 @@
 
 namespace Test\Ipc;
 
-use Gui\Ipc\CommandMessage;
-use PHPUnit\Framework\TestCase;
+use Gui\Ipc\CommandMessage;use Gui\Ipc\MessageInterface;use PHPUnit\Framework\TestCase;
 
+/**
+* Event Message Test.
+ */
 class EventMessageTest extends TestCase
 {
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $method = 'method';
         $params = ['param1' => 'param1'];
-        $foo = 0;
-        $event = new CommandMessage(
-            $method,
-            $params
-        );
+        $event = new CommandMessage($method, $params);
 
-        $this->assertEquals($event->method, $method);
-        $this->assertEquals($event->params, $params);
-        $this->assertInstanceOf('Gui\Ipc\MessageInterface', $event);
+        static::assertEquals($event->method, $method);
+        static::assertEquals($event->params, $params);
+        static::assertInstanceOf(MessageInterface::class, $event);
     }
 }

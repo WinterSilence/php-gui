@@ -2,21 +2,21 @@
 
 namespace Gui\Components;
 
+use InvalidArgumentException;use function file_exists;use function in_array;use function preg_match;use function ucfirst;
+
 /**
  * This is the Window Class
- *
  * It is a visual component for window
  *
  * @author Rafael Reis @reisraff
- * @since 0.1
  */
+
 class Window extends ContainerObject
 {
-
     /**
      * The lazarus class as string
      *
-     * @var string $lazarusClass
+     * @var string
      */
     protected $lazarusClass = 'TForm1';
 
@@ -25,9 +25,9 @@ class Window extends ContainerObject
      *
      * @param string $title
      *
-     * @return self
+     * @return $this
      */
-    public function setTitle($title)
+    public function setTitle(string $title): Window
     {
         $this->set('caption', $title);
 
@@ -37,9 +37,9 @@ class Window extends ContainerObject
     /**
      * Gets the window title
      *
-     * @return String
+     * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->get('caption');
     }
@@ -49,9 +49,9 @@ class Window extends ContainerObject
      *
      * @param string $icon
      *
-     * @return self
+     * @return $this
      */
-    public function setIcon($icon)
+    public function setIcon(string $icon): Window
     {
         if (file_exists($icon) && preg_match('/ico$/i', $icon)) {
             $this->call(
@@ -59,28 +59,29 @@ class Window extends ContainerObject
                 [$icon]
             );
         }
-
         return $this;
     }
 
     /**
-     * Sets the window state. Can be one of the following values: fullscreen, minimized, maximized, normal
+     * Sets the window state. Can be one of the following values: fullscreen,
+     * minimized, maximized, normal
      *
      * @param string $state
-     *
-     * @return self
+     * @return $this
      */
-    public function setWindowState($state = 'normal')
+    public function setWindowState(string $state = 'normal'): Window
     {
         $validStates = [
             'fullscreen',
             'minimized',
             'maximized',
-            'normal'
+            'normal',
         ];
 
-        if (!in_array($state, $validStates)) {
-            throw new \InvalidArgumentException('Unknown state: ' . $state);
+        if (! in_array($state, $validStates)) {
+            throw new InvalidArgumentException(
+                'Unknown state: ' . $state
+            );
         }
 
         $this->set('windowState', 'ws' . ucfirst($state));

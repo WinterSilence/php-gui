@@ -2,50 +2,47 @@
 
 namespace Gui\Components;
 
-use Gui\Application;
+use Gui\Application;use function lcfirst;use function method_exists;use function substr;use function ucfirst;
 
 /**
- * This is the Object class
- *
- * It is base abstraction for Lazarus Object
+ * This is the Object class. It is base abstraction for Lazarus Object
  *
  * @author Gabriel Couto @gabrielrcouto
- * @since 0.1
  */
 abstract class AbstractObject implements LazarusObjectInterface
 {
     /**
      * The lazarus class as string
      *
-     * @var string $lazarusClass
+     * @var string
      */
     protected $lazarusClass = 'TObject';
 
     /**
      * The communication object id
      *
-     * @var int $lazarusObjectId
+     * @var int
      */
     protected $lazarusObjectId;
 
     /**
      * The application object
      *
-     * @var Application $application
+     * @var Application
      */
     protected $application;
 
     /**
      * The array of callbacks
      *
-     * @var array $eventHandlers
+     * @var array
      */
     protected $eventHandlers = [];
 
     /**
      * The array of special properties
      *
-     * @var array $runTimeProperties
+     * @var array
      */
     protected $runTimeProperties = [];
 
@@ -55,25 +52,23 @@ abstract class AbstractObject implements LazarusObjectInterface
      * @param array $defaultAttributes
      * @param ContainerObjectInterface $parent
      * @param Application $application
-     *
      * @return void
      */
     public function __construct(
         array $defaultAttributes = [],
         ContainerObjectInterface $parent = null,
-        $application = null
+        Application $application = null
     ) {
         $object = $this;
 
-        // We can use multiple applications, but, if no one is defined, we use the
-        // first (default)
-        if ($application == null) {
+        // We can use multiple applications, but, if no one is defined, we use the first (default)
+        if ($application === null) {
             $this->application = Application::$defaultApplication;
         } else {
             $this->application = $application;
         }
 
-        if ($parent == null) {
+        if ($parent === null) {
             $parent = $this->application->getWindow();
         }
 
@@ -95,7 +90,7 @@ abstract class AbstractObject implements LazarusObjectInterface
                         'parent' => $parent->getLazarusObjectId()
                     ]
                 ],
-                function ($result) use ($object, $defaultAttributes) {
+                static function () use ($object, $defaultAttributes) {
                     foreach ($defaultAttributes as $attr => $value) {
                         $method = 'set' . ucfirst($attr);
                         if (method_exists($object, $method)) {
@@ -113,9 +108,9 @@ abstract class AbstractObject implements LazarusObjectInterface
      * @param string $method
      * @param array $params
      *
-     * @return self|mixed
+     * @return mixed
      */
-    public function __call($method, $params)
+    public function __call(string $method, array $params)
     {
         $type = substr($method, 0, 3);
         $rest = lcfirst(substr($method, 3));
@@ -126,15 +121,9 @@ abstract class AbstractObject implements LazarusObjectInterface
                     return $this->runTimeProperties[$rest];
                 }
                 break;
-
             case 'set':
                 $this->runTimeProperties[$rest] = $params[0];
                 return $this;
-                break;
-
-            default:
-                # do nothing
-                break;
         }
     }
 
@@ -143,24 +132,20 @@ abstract class AbstractObject implements LazarusObjectInterface
      *
      * @param string $method
      * @param array $params
-     * @param boolean $isCommand
+     * @param bool $isCommand
      *
      * @return void
      */
-    protected function call($method, array $params, $isCommand = true)
-    {
+    public function call(
+        string $method,
+        array $params,
+        bool $isCommand = true
+    ): void {
         if ($isCommand) {
             // It's a command
             $this->application->sendCommand(
                 'callObjectMethod',
-                [
-                    $this->lazarusObjectId,
-                    $method,
-                    $params
-                ],
-                function ($result) {
-                    // Ok, the property changed
-                }
+                [$this->lazarusObjectId, $method, $params]
             );
 
             return;
@@ -182,21 +167,17 @@ abstract class AbstractObject implements LazarusObjectInterface
      *
      * @param string $name  Property name
      * @param mixed $value Property value
-     *
      * @return void
      */
-    protected function set($name, $value)
+    public function set(string $name, $value): void
     {
         $this->application->sendCommand(
             'setObjectProperty',
             [
                 $this->lazarusObjectId,
                 $name,
-                $value
-            ],
-            function ($result) {
-                // Ok, the property changed
-            }
+                $value,
+            ]
         );
     }
 
@@ -204,21 +185,20 @@ abstract class AbstractObject implements LazarusObjectInterface
      * This magic method is used to send the IPC message when a property is get
      *
      * @param string $name Property name
-     *
      * @return mixed
      */
-    protected function get($name)
+    public function get(string $name)
     {
-        return $this->application->waitCommand('getObjectProperty', [
-            $this->lazarusObjectId,
-            $name
-        ]);
+        return $this->application->waitCommand(
+            'getObjectProperty',
+            [$this->lazarusObjectId, $name]
+        );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getLazarusObjectId()
+    public function getLazarusObjectId(): int
     {
         return $this->lazarusObjectId;
     }
@@ -226,7 +206,7 @@ abstract class AbstractObject implements LazarusObjectInterface
     /**
      * {@inheritdoc}
      */
-    public function getLazarusClass()
+    public function getLazarusClass(): string
     {
         return $this->lazarusClass;
     }
@@ -234,7 +214,7 @@ abstract class AbstractObject implements LazarusObjectInterface
     /**
      * {@inheritdoc}
      */
-    public function fire($eventName)
+    public function fire(string $eventName): void
     {
         if (array_key_exists($eventName, $this->eventHandlers)) {
             foreach ($this->eventHandlers[$eventName] as $eventHandler) {
@@ -246,18 +226,16 @@ abstract class AbstractObject implements LazarusObjectInterface
     /**
      * {@inheritdoc}
      */
-    public function on($eventName, callable $eventHandler)
+    public function on(string $eventName, callable $eventHandler): void
     {
-        $eventName = 'on' . $eventName;
+        $eventName = 'on' . ucfirst($eventName);
 
-        $this->application->sendCommand('setObjectEventListener', [
-            $this->lazarusObjectId,
-            $eventName
-        ], function ($result) {
-            // Ok, the event listener created
-        });
+        $this->application->sendCommand(
+            'setObjectEventListener',
+            [$this->lazarusObjectId, $eventName]
+        );
 
-        if (! array_key_exists($eventName, $this->eventHandlers)) {
+        if (! isset($this->eventHandlers[$eventName])) {
             $this->eventHandlers[$eventName] = [];
         }
 

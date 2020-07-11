@@ -70,7 +70,7 @@ Response:
 ```json
 {
     "id": 2,
-    "result": 123 // This is the object ID
+    "result": 123
 }
 ```
 
@@ -81,7 +81,7 @@ Response:
     "id": 2,
     "method": "setObjectProperty",
     "params": [
-        lazarusObjectId,
+        "lazarusObjectId",
         "propertyName",
         "propertyValue"
     ]
@@ -104,7 +104,7 @@ Response:
     "id": 2,
     "method": "setObjectEventListener",
     "params": [
-        lazarusObjectId,
+        "lazarusObjectId",
         "eventName"
     ]
 }

@@ -1,11 +1,15 @@
-composer.lock
+*.lock
+*.cache
 vendor/
 material/
 lazarus/backup/
 lazarus/lib/
-bin/*
+bin/
 !bin/.gitkeep
 !bin/generatedoc
 phpunit.xml
 doc/
 /nbproject
+.idea/phing.xml
+.php_cs.cache
+composer.json

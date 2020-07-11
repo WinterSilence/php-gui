@@ -2,12 +2,14 @@
 
 namespace Test\Ipc;
 
-use Gui\Ipc\CommandMessage;
-use PHPUnit\Framework\TestCase;
+use Gui\Ipc\CommandMessage;use Gui\Ipc\MessageInterface;use PHPUnit\Framework\TestCase;
 
+/**
+ * Command Message Test.
+ */
 class CommandMessageTest extends TestCase
 {
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $method = 'method';
         $params = ['param1' => 'param1'];
@@ -15,16 +17,16 @@ class CommandMessageTest extends TestCase
         $msg = new CommandMessage(
             $method,
             $params,
-            function () use (&$foo) {
+            static function () use (&$foo) {
                 $foo++;
             }
         );
 
-        $this->assertEquals($msg->method, $method);
-        $this->assertEquals($msg->params, $params);
+        static::assertEquals($msg->method, $method);
+        static::assertEquals($msg->params, $params);
         $callback = $msg->callback;
         $callback();
-        $this->assertEquals(1, $foo);
-        $this->assertInstanceOf('Gui\Ipc\MessageInterface', $msg);
+        static::assertEquals(1, $foo);
+        static::assertInstanceOf(MessageInterface::class, $msg);
     }
 }

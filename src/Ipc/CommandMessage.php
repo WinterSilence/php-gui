@@ -8,7 +8,6 @@ namespace Gui\Ipc;
  * This class is used as a CommandMessage object
  *
  * @author Gabriel Couto @gabrielrcouto
- * @since 0.1
  */
 class CommandMessage implements MessageInterface
 {
@@ -36,7 +35,7 @@ class CommandMessage implements MessageInterface
     /**
      * The command callback
      *
-     * @var callable $callback
+     * @var null|callable $callback
      */
     public $callback;
 
@@ -45,11 +44,11 @@ class CommandMessage implements MessageInterface
      *
      * @param string $method
      * @param array $params
-     * @param callable $callback
+     * @param null|callable $callback
      *
      * @return void
      */
-    public function __construct($method, array $params, callable $callback = null)
+    public function __construct(string $method, array $params, ?callable $callback = null)
     {
         $this->method = $method;
         $this->params = $params;

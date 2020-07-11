@@ -2,11 +2,7 @@
 
 namespace Test\Ipc;
 
-use Gui\Application;
-use Gui\Exception\ComponentException;
-use Gui\Ipc\Receiver;
-use PHPUnit\Framework\TestCase;
-use Test\Util;
+use Gui\Application;use Gui\Exception\ComponentException;use Gui\Ipc\Receiver;use PHPUnit\Framework\TestCase;use Test\Util;
 
 class ReceiverTest extends TestCase
 {

@@ -2,23 +2,23 @@
 
 namespace Gui\Exception;
 
+use RuntimeException;use Throwable;
+
 /**
  * This is the Exception Class for Components
  *
- *
  * @author Johann SERVOIRE @Johann-S
- * @since 0.1
  */
-class ComponentException extends \RuntimeException
+class ComponentException extends RuntimeException
 {
     /**
-     * ComponentException
+     * Creates new exception.
      *
      * @param string $message
      * @param int $code
-     * @param \Exception|null $previous
+     * @param Throwable $previous
      */
-    public function __construct($message, $code = 0, \Exception $previous = null)
+    public function __construct(string $message, int $code = 0, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
@@ -26,8 +26,8 @@ class ComponentException extends \RuntimeException
     /**
      * Activated when casting to string
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+        return static::class . ": [{$this->code}]: {$this->message}\n";
     }
 }

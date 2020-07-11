@@ -2,28 +2,30 @@
 
 namespace Test;
 
-use Gui\Color;
-use PHPUnit\Framework\TestCase;
+use Gui\Color;use InvalidArgumentException;use PHPUnit\Framework\TestCase;use function is_int;
 
+/**
+ * Color Test
+ */
 class ColorTest extends TestCase
 {
-    public function testColorToLazarus()
+    public function testColorToLazarus(): void
     {
         $lazarusColor = Color::toLazarus('#112233');
+        static::assertIsInt($lazarusColor);
+        static::assertEquals(3351057, $lazarusColor);
 
-        $this->assertTrue(is_int($lazarusColor));
-        $this->assertEquals(3351057, $lazarusColor);
-
-        $lazarusColor = Color::toLazarus('112233');
-        $this->assertTrue(is_int($lazarusColor));
-        $this->assertEquals(3351057, $lazarusColor);
+        $isInt = is_int(Color::toLazarus('112233'));
+        static::assertTrue($isInt);
+        static::assertNotEquals(3351057, $lazarusColor);
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    public function testShouldThrowExceptionWithInvalidHexColor()
+    public function testShouldThrowExceptionWithInvalidHexColor(): void
     {
-        $lazarusColor = Color::toLazarus('#11AAGG');
+        $this->expectException(InvalidArgumentException::class);
+        Color::toLazarus('#11AAGG');
     }
 }

@@ -2,84 +2,86 @@
 
 namespace Test\Components;
 
-use Gui\Application;
-use Gui\Components\Window;
-use PHPUnit\Framework\TestCase;
+use Gui\Application;use Gui\Components\AbstractObject;use PHPUnit\Framework\TestCase;
 
+/**
+* Object Test
+ */
 class ObjectTest extends TestCase
 {
-    public function testMagicCall()
+    public function testMagicCall(): void
     {
         $mock = $this->getMockForAbstractClass(
-            'Gui\Components\AbstractObject',
+            AbstractObject::class,
             [
                 [],
                 null,
-                new Application()
+                new Application(),
             ]
         );
 
-        $mock->expects($this->any())
+        $mock
+            //->expects(self::any())
             ->method('__call');
 
 
         $mock->setFoo(1);
-        $this->assertEquals(1, $mock->getFoo());
+        static::assertEquals(1, $mock->getFoo());
     }
 
-    public function testOnAndFire()
+    public function testOnAndFire(): void
     {
-        $appMock = $this->getMockBuilder('Gui\Application')
-            ->setMethods(['sendCommand'])
+        $appMock = $this->getMockBuilder(Application::class, ['sendCommand'])
             ->getMock();
 
-        $appMock->expects($this->any())
+        $appMock
+            //->expects(self::any())
             ->method('sendCommand');
 
         $mock = $this->getMockForAbstractClass(
-            'Gui\Components\AbstractObject',
+            AbstractObject::class,
             [
                 [],
                 null,
-                $appMock
+                $appMock,
             ]
         );
 
         $bar = 0;
-        $mock->on('foo', function () use (&$bar) {
+        $mock->on('foo', static function () use (&$bar) {
             $bar++;
         });
 
         $mock->fire('onfoo');
 
-        $this->assertEquals(1, $bar);
+        static::assertEquals(1, $bar);
     }
 
-    public function testGetLazarusClass()
+    public function testGetLazarusClass(): void
     {
         $mock = $this->getMockForAbstractClass(
-            'Gui\Components\AbstractObject',
+            AbstractObject::class,
             [
                 [],
                 null,
-                new Application
+                new Application,
             ]
         );
 
-        $this->assertEquals('TObject', $mock->getLazarusClass());
+        static::assertEquals('TObject', $mock->getLazarusClass());
     }
 
-    public function testGetLazarusObjectId()
+    public function testGetLazarusObjectId(): void
     {
         $mock = $this->getMockForAbstractClass(
-            'Gui\Components\AbstractObject',
+            AbstractObject::class,
             [
                 [],
                 null,
-                new Application
+                new Application,
             ]
         );
 
-        $this->assertEquals(1, $mock->getLazarusObjectId());
+        static::assertEquals(1, $mock->getLazarusObjectId());
     }
 }

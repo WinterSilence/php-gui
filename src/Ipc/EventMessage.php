@@ -8,7 +8,6 @@ namespace Gui\Ipc;
  * This class is used as a EventMessage object
  *
  * @author Gabriel Couto @gabrielrcouto
- * @since 0.1
  */
 class EventMessage implements MessageInterface
 {
@@ -31,10 +30,8 @@ class EventMessage implements MessageInterface
      *
      * @param string $method
      * @param array $params
-     *
-     * @return void
      */
-    public function __construct($method, array $params)
+    public function __construct(string $method, array $params)
     {
         $this->method = $method;
         $this->params = $params;

@@ -1,84 +1,83 @@
 <?php
 namespace Gui\Components;
 
-use Gui\Exception\ComponentException;
+use Gui\Application;use Gui\Exception\ComponentException;
 
 /**
- * This is the InputNumber Class
- *
- * It is a visual component for input numbers -- integer and float
+ * This is the InputNumber Class It is a visual component for input numbers
+ * - integer and float
  *
  * @author Everton da Rosa everton3x@gmail.com
- * @since 0.1
  */
 class InputNumber extends VisualObject
 {
-
     /**
      * The lazarus class string to integer number control.
      *
-     * @var string $lazIntClass
+     * @var string
      */
     protected $lazIntClass = 'TSpinEdit';
 
     /**
      * The lazarus class string to float number control.
      *
-     * @var string $lazIntClass
+     * @var string
      */
     protected $lazFloatClass = 'TFloatSpinEdit';
 
     /**
      * The lazarus class as string
      *
-     * @var string $lazarusClass
+     * @var string
      */
     protected $lazarusClass = '';
 
     /**
      * The class constructor.
      *
-     * @param bool $isFloat If TRUE, define controlto manage float number. FALSE (default), to integer numbers.
+     * @param bool $isFloat If TRUE, define controlto manage float number.
+     *     FALSE (default), to integer numbers.
      * @param array $defaultAttributes
-     * @param \Gui\Components\ContainerObjectInterface $parent
-     * @param type $application
+     * @param ContainerObjectInterface $parent
+     * @param Application $application
      */
     public function __construct(
-        $isFloat = false,
-        array $defaultAttributes = array(),
+        bool $isFloat = false,
+        array $defaultAttributes = [],
         ContainerObjectInterface $parent = null,
-        $application = null
+        Application $application = null
     ) {
         if ($isFloat) {
             $this->lazarusClass = $this->lazFloatClass;
         } else {
             $this->lazarusClass = $this->lazIntClass;
         }
-
         parent::__construct($defaultAttributes, $parent, $application);
     }
 
     /**
      * Sets the value by which the value of the control should be
-     * increased/decresed when the user clicks one of the arrows or one of the keyboard up/down arrows.
+     * increased/decresed when the user clicks one of the arrows or one of the
+     * keyboard up/down arrows.
      *
-     * @param int|float $value
+     * @param float $value
+     *
      * @return $this
      */
-    public function setIncrement($value)
+    public function setIncrement(float $value): InputNumber
     {
         $this->set('Increment', $value);
-
         return $this;
     }
 
     /**
      * Gets the value by which the value of the control should be
-     * increased/decresed when the user clicks one of the arrows or one of the keyboard up/down arrows.
+     * increased/decresed when the user clicks one of the arrows or one of the
+     * keyboard up/down arrows.
      *
-     * @return int|float
+     * @return float
      */
-    public function getIncrement($value)
+    public function getIncrement(): float
     {
         return $this->get('Increment');
     }
@@ -86,10 +85,11 @@ class InputNumber extends VisualObject
     /**
      * Sets de max value.
      *
-     * @param int|float $max
+     * @param float $max
+     *
      * @return $this
      */
-    public function setMax($max)
+    public function setMax(float $max): InputNumber
     {
         $this->set('MaxValue', $max);
         return $this;
@@ -98,9 +98,9 @@ class InputNumber extends VisualObject
     /**
      * Gets the max value.
      *
-     * @return int|float
+     * @return float
      */
-    public function getMax()
+    public function getMax(): float
     {
         return $this->get('MaxValue');
     }
@@ -108,10 +108,11 @@ class InputNumber extends VisualObject
     /**
      * Sets de min value.
      *
-     * @param int|float $min
+     * @param float $min
+     *
      * @return $this
      */
-    public function setMin($min)
+    public function setMin(float $min): InputNumber
     {
         $this->set('MinValue', $min);
         return $this;
@@ -120,9 +121,9 @@ class InputNumber extends VisualObject
     /**
      * Gets the min value.
      *
-     * @return int|float
+     * @return float
      */
-    public function getMin()
+    public function getMin(): float
     {
         return $this->get('MinValue');
     }
@@ -130,11 +131,10 @@ class InputNumber extends VisualObject
     /**
      * Sets the value of value.
      *
-     * @param int|float $value the value
-     *
-     * @return self
+     * @param float $value the value
+     * @return $this
      */
-    public function setValue($value)
+    public function setValue(float $value): InputNumber
     {
         $this->set('Value', $value);
 
@@ -144,9 +144,9 @@ class InputNumber extends VisualObject
     /**
      * Gets the value of value;
      *
-     * @return int|float
+     * @return float
      */
-    public function getValue()
+    public function getValue(): float
     {
         return $this->get('Value');
     }
@@ -154,31 +154,34 @@ class InputNumber extends VisualObject
     /**
      * Sets decimals for control.
      *
-     * @param int $decimal
+     * @param float $decimal
      * @return $this
      * @throws ComponentException
      */
-    public function setDecimals($decimal)
+    public function setDecimals(float $decimal): InputNumber
     {
         if ($this->lazarusClass === $this->lazFloatClass) {
             $this->set('DecimalPlaces', $decimal);
             return $this;
-        } else {
-            throw new ComponentException('Invalid call to InputNumber::setDecimal() at not type TFloatSpinEdit type');
         }
+        throw new ComponentException(
+            'Invalid call to setDecimal() at not type TFloatSpinEdit type'
+        );
     }
 
     /**
      * Gest de decimal.
      *
-     * @return int
+     * @return float
+     * @throws ComponentException
      */
-    public function getDecimals()
+    public function getDecimals(): float
     {
         if ($this->lazarusClass === $this->lazFloatClass) {
             return $this->get('DecimalPlaces');
-        } else {
-            throw new ComponentException('Invalid call to InputNumber::getDecimal() at not type TFloatSpinEdit type');
         }
+        throw new ComponentException(
+            'Invalid call to getDecimal() at not type TFloatSpinEdit type'
+        );
     }
 }

@@ -6,14 +6,12 @@
     <property name="bindir" value="bin" />
 
     <target name="main" description="Start analyzing our application">
-        <echo msg="Start Build" />
-
-        <phingCall target="phplint" />
-        <phingCall target="phpunit" />
-        <phingCall target="phpcs" />
-        <phingCall target="generatedoc" />
-
-        <echo msg="Finished Build" />
+        <echo msg="Start Build"/>
+        <phingcall target="phplint"/>
+        <phingcall target="phpunit"/>
+        <phingcall target="phpcs"/>
+        <phingcall target="generatedoc"/>
+        <echo msg="Finished Build"/>
     </target>
 
     <target name="phplint" description="Check syntax of a fileset of source files.">
@@ -29,9 +27,9 @@
     </target>
 
     <target name="phpcs" description="Coding Standards Analysis">
-        <exec passthru="true" command="${bindir}/phpcs --standard=PSR2 ${source}" checkreturn="true" />
-        <exec passthru="true" command="${bindir}/phpcs --standard=PSR2 ${examples}" checkreturn="true" />
-        <exec passthru="true" command="${bindir}/phpcs --standard=PSR2 ${test}" checkreturn="true" />
+        <exec passthru="true" command="${bindir}/phpcs --standard=PSR12 ${source}" checkreturn="true"/>
+        <exec passthru="true" command="${bindir}/phpcs --standard=PSR12 ${examples}" checkreturn="true"/>
+        <exec passthru="true" command="${bindir}/phpcs --standard=PSR12 ${test}" checkreturn="true"/>
     </target>
 
     <target name="generatedoc" description="Generate Doc">

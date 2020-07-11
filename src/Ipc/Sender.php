@@ -2,16 +2,13 @@
 
 namespace Gui\Ipc;
 
-use Gui\Application;
-use Gui\Output;
+use Gui\Application;use Gui\Output;
 
 /**
  * This is the Sender class
- *
  * This class is used to send communication messages
  *
  * @author Gabriel Couto @gabrielrcouto
- * @since 0.1
  */
 class Sender
 {

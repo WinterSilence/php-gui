@@ -2,26 +2,27 @@
 
 namespace Gui\Components;
 
+use RuntimeException;
+
 /**
  * It is a container component
  *
  * @author Rodrigo Azevedo @rodrigowbazeved
- * @since 0.1
  */
 abstract class ContainerObject extends VisualObject implements ContainerObjectInterface
 {
-
     /**
      * The children objetcs
      *
-     * @var array $children
+     * @var AbstractObject[]
      */
     protected $children = [];
 
     /**
      * {@inheritdoc}
+     * @param AbstractObject $object
      */
-    public function appendChild(VisualObjectInterface $object)
+    public function appendChild(VisualObjectInterface $object): void
     {
         $this->children[$object->getLazarusObjectId()] = $object;
     }
@@ -29,10 +30,10 @@ abstract class ContainerObject extends VisualObject implements ContainerObjectIn
     /**
      * {@inheritdoc}
      */
-    public function getChild($lazarusObjectId)
+    public function getChild(int $lazarusObjectId): VisualObjectInterface
     {
         if (!isset($this->children[$lazarusObjectId])) {
-            throw new \Exception("Child object not found");
+            throw new RuntimeException("Child object not found");
         }
 
         return $this->children[$lazarusObjectId];
@@ -41,7 +42,7 @@ abstract class ContainerObject extends VisualObject implements ContainerObjectIn
     /**
      * {@inheritdoc}
      */
-    public function getChildren()
+    public function getChildren(): array
     {
         return $this->children;
     }

@@ -2,13 +2,13 @@
 
 namespace Gui;
 
+use function php_uname;use function strpos;use const DIRECTORY_SEPARATOR;use const PHP_OS;
+
 /**
  * This is the OsDetector Class
- *
  * This class is used to check to current OS
  *
  * @author Gabriel Couto @gabrielrcouto
- * @since 0.1
  */
 class OsDetector
 {
@@ -17,9 +17,9 @@ class OsDetector
      *
      * @return bool
      */
-    public static function isMacOS()
+    public static function isMacOS(): bool
     {
-        return false !== strpos(php_uname('s'), 'Darwin');
+        return false !== strpos(PHP_OS, 'Darwin');
     }
 
     /**
@@ -27,7 +27,7 @@ class OsDetector
      *
      * @return bool
      */
-    public static function isUnix()
+    public static function isUnix(): bool
     {
         return '/' === DIRECTORY_SEPARATOR;
     }
@@ -37,9 +37,9 @@ class OsDetector
      *
      * @return bool
      */
-    public static function isFreeBSD()
+    public static function isFreeBSD(): bool
     {
-        return false !== strpos(php_uname('s'), 'FreeBSD');
+        return false !== strpos(PHP_OS, 'FreeBSD');
     }
 
     /**
@@ -47,7 +47,7 @@ class OsDetector
      *
      * @return bool
      */
-    public static function isWindows()
+    public static function isWindows(): bool
     {
         return '\\' === DIRECTORY_SEPARATOR;
     }
@@ -57,7 +57,7 @@ class OsDetector
      *
      * @return string
      */
-    public static function systemArchitecture()
+    public static function systemArchitecture(): string
     {
         return php_uname('m');
     }

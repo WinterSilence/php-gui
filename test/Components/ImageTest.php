@@ -2,16 +2,17 @@
 
 namespace Test\Components;
 
-use Gui\Application;
-use Gui\Components\Image;
-use PHPUnit\Framework\TestCase;
+use Exception;use Gui\Application;use Gui\Components\Image;use PHPUnit\Framework\TestCase;
 
+/**
+ * Image Test
+ */
 class ImageTest extends TestCase
 {
-    public function testMissingFile()
+    public function testMissingFile(): void
     {
         $this->setExpectedException(
-            \Exception::class,
+            Exception::class,
             'The file could not be found.'
         );
         

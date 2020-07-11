@@ -166,6 +166,8 @@ begin
   RegisterClass(TTimeEdit);
   RegisterClass(TCalendar);
   RegisterClass(TStringGrid);
+  RegisterClass(TMainMenu);
+  RegisterClass(TPopupMenu);
 
   // Initializes the input pipe (Stdin)
   StdinStream := TInputPipeStream.Create(StdInputHandle);

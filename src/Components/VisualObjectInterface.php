@@ -6,151 +6,145 @@ namespace Gui\Components;
  * It is a visual component interface
  *
  * @author Rodrigo Azevedo @rodrigowbazeved
- * @since 0.1
  */
 interface VisualObjectInterface
 {
     /**
      * Get the auto size
      *
-     * @return Boolean
+     * @return bool
      */
-    public function getAutoSize();
+    public function getAutoSize(): bool;
 
     /**
      * Set the auto size
      *
-     * @param Boolean $autoSize True = Enabled
+     * @param bool $autoSize True = Enabled
      *
-     * @return self
+     * @return static
      */
-    public function setAutoSize($autoSize);
+    public function setAutoSize(bool $autoSize): VisualObjectInterface;
 
     /**
      * Get the background color
      *
-     * @return String
+     * @return string
      */
-    public function getBackgroundColor();
+    public function getBackgroundColor(): string;
 
     /**
      * Set the background Color
      *
      * @param string $color Color '#123456'
      *
-     * @return self
+     * @return static
      */
-    public function setBackgroundColor($color);
+    public function setBackgroundColor(string $color): VisualObjectInterface;
 
     /**
      * Gets the value of bottom in pixel.
      *
      * @return int
      */
-    public function getBottom();
+    public function getBottom(): int;
 
     /**
      * Sets the value of bottom in pixel.
      *
-     * @param int $bottom the bottom
-     *
-     * @return self
+     * @param int $bottom the bottom margin
+     * @return static
      */
-    public function setBottom($bottom);
+    public function setBottom(int $bottom): VisualObjectInterface;
 
     /**
      * Gets the value of height in pixel.
      *
      * @return int
      */
-    public function getHeight();
+    public function getHeight(): int;
 
     /**
      * Sets the value of height in pixel.
      *
      * @param int $height the height
-     *
-     * @return self
+     * @return static
      */
-    public function setHeight($height);
+    public function setHeight(int $height): VisualObjectInterface;
 
     /**
      * Gets the value of left in pixel.
      *
      * @return int
      */
-    public function getLeft();
+    public function getLeft(): int;
 
     /**
      * Sets the value of left in pixel.
      *
-     * @param int $left the left
+     * @param int $left the left margin
      *
-     * @return self
+     * @return static
      */
-    public function setLeft($left);
+    public function setLeft(int $left): VisualObjectInterface;
 
     /**
      * Gets the value of right in pixel.
      *
      * @return int
      */
-    public function getRight();
+    public function getRight(): int;
 
     /**
      * Sets the value of right in pixel.
      *
-     * @param int $right the right
-     *
-     * @return self
+     * @param int $right the right margin
+     * @return static
      */
-    public function setRight($right);
+    public function setRight(int $right): VisualObjectInterface;
 
     /**
      * Gets the value of top in pixel.
      *
      * @return int
      */
-    public function getTop();
+    public function getTop(): int;
 
     /**
      * Sets the value of top in pixel.
      *
-     * @param int $top the top
-     *
-     * @return self
+     * @param int $top the top margin
+     * @return static
      */
-    public function setTop($top);
+    public function setTop(int $top): VisualObjectInterface;
 
     /**
      * Gets the value of width in pixel.
      *
      * @return int
      */
-    public function getWidth();
+    public function getWidth(): int;
 
     /**
      * Sets the value of width in pixel.
      *
      * @param int $width the width
-     *
-     * @return self
+     * @return static
      */
-    public function setWidth($width);
+    public function setWidth(int $width): VisualObjectInterface;
 
     /**
      * Gets the value of visible in pixel.
      *
-     * @return boolean
+     * @return bool
      */
-    public function getVisible();
+    public function getVisible(): bool;
 
     /**
      * Sets the value of visible in pixel.
      *
-     * @param boolean $visible the visible
+     * @param bool $visible the visible
      *
-     * @return self
+     * @return static
      */
-    public function setVisible($visible);
+    public function setVisible(bool $visible): VisualObjectInterface;
 }
